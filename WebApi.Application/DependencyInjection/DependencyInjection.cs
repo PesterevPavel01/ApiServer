@@ -17,7 +17,7 @@ namespace WebApi.Application.DependencyInjection
     {
         public static void AddApplication(this IServiceCollection services) 
         {
-            services.AddAutoMapper(typeof(DocumentMapping));
+            //services.AddAutoMapper(typeof(DocumentMapping));
             services.AddAutoMapper(typeof(DepartmentMapping));
             services.AddAutoMapper(typeof(OrganizationMapping));
             services.AddAutoMapper(typeof(ExpenditureMapping));

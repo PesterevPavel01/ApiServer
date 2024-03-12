@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using WebApi.Application.Services;
 using WebApi.Domain.Dto.Document;
-using WebApi.Domain.Entity;
+using WebApi.Domain.Enum;
 using WebApi.Domain.Interfaces.Services;
 using WebApi.Domain.Result;
 
@@ -11,26 +11,85 @@ namespace WebApi.Api.Controllers
     [ApiController]
     public class ExpenseDocumentController : ControllerBase
     {
-        private readonly IDepartmentService _departmentService;
-        public ExpenseDocumentController(IDepartmentService departmentService)
+        private readonly IDocumentService _documentService;
+        public ExpenseDocumentController(IDocumentService documentService)
         {
-            _departmentService = departmentService;
-        }
-
-        [HttpGet("{id}")]
-        public async Task<ActionResult<BaseResult<DepartmentDto>>> GetDepartment(short id)
-        {
-            var response = await _departmentService.GetDepartmentByIdAsync(id);
-
-            if (response.IsSuccess) return Ok(response);
-
-            return BadRequest(response);
+            _documentService = documentService;
         }
 
         [HttpGet("test")]
         public IActionResult TestApi()
         {
             return Ok("Сервер работает!");
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<BaseResult<DocumentDto>>> GetDocumentById(long id)
+        {
+            var response = await _documentService.GetDocumentByIdAsync(id);
+
+            if (response.IsSuccess) return Ok(response);
+
+            return BadRequest(response);
+        }
+
+        [HttpGet()]
+        public async Task<ActionResult<CollectionResult<DocumentDto>>> GetDocuments([FromBody] List<DateTime> dates)
+        {
+
+            var response = await _documentService.GetDocumentsAsync(dates[0], dates[1]);
+
+            if (response.IsSuccess) return Ok(response);
+
+            return BadRequest(response);
+        }
+
+        [HttpPost("{expenditure}")]
+        public async Task<ActionResult<CollectionResult<DocumentDto>>> GetDocuments(string expenditure,[FromBody] List<DateTime> dates)
+        {
+            var response = await _documentService.GetDocumentsByExpenditureAsync(dates[0], dates[1], expenditure);
+
+            if (response.IsSuccess) return Ok(response);
+
+            return BadRequest(response);
+        }
+
+        [HttpPost()]
+        public async Task<ActionResult<BaseResult<CreateDocumentDto>>> CreateDocument ([FromBody] CreateDocumentDto document)
+        {
+            if (document != null)
+            {
+                var response = await _documentService.CreateDocumentAsync(document);
+
+                if (response.IsSuccess) return Ok(response);
+
+                return BadRequest(response);
+            }
+            return BadRequest();
+        }
+
+        [HttpPatch()]
+        public async Task<ActionResult<BaseResult<CreateDocumentDto>>> UpdateDocument([FromBody] DocumentDto document)
+        {
+            if (document != null)
+            {
+                var response = await _documentService.UpdateDocumentAsync(document);
+
+                if (response.IsSuccess) return Ok(response);
+
+                return BadRequest(response);
+            }
+            return BadRequest();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<BaseResult<DocumentDto>>> DeleteDocument(long id)
+        {
+            var response = await _documentService.DeleteDocumentAsync(id);
+
+            if (response.IsSuccess) return Ok(response);
+
+            return BadRequest(response);
         }
     }
 }

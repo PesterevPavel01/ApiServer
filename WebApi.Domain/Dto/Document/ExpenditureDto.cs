@@ -1,4 +1,4 @@
 ﻿namespace WebApi.Domain.Dto.Document
 {
-    public record ExpenditureDto(short Id, string Name);
+    public record ExpenditureDto(short? Id, string Name);
 }

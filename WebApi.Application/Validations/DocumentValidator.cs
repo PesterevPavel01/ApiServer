@@ -28,5 +28,6 @@ namespace WebApi.Application.Validations
                 };
             return new BaseResult();
         }
+
     }
 }

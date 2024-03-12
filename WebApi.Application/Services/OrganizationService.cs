@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using WebApi.Application.Resources;
+using WebApi.Application.Validations;
 using WebApi.Domain.Dto.Document;
 using WebApi.Domain.Entity;
 using WebApi.Domain.Enum;
@@ -24,7 +25,7 @@ namespace WebApi.Application.Services
             _organizationRepository = organizationRepository;
             _mapper = mapper;
             _logger = logger;
-            _organizationRepository = organizationRepository;
+            _organizationValidator = organizationValidator;
 
         }
 
@@ -32,7 +33,7 @@ namespace WebApi.Application.Services
         {
             try
             {
-                var organization = await _organizationRepository.GetAll().FirstOrDefaultAsync(x => x.Id == model.Id);
+                var organization = await _organizationRepository.GetAll().FirstOrDefaultAsync(x => x.Name == model.Name);
                 var result = _organizationValidator.CreateValidator(organization);
 
                 if (!result.IsSuccess)
@@ -160,12 +161,19 @@ namespace WebApi.Application.Services
 
         public async Task<BaseResult<OrganizationDto>> GetByIdAsync(short id)
         {
-            OrganizationDto organization;
+            Organization organization;
             try
             {
                 organization = await _organizationRepository.GetAll()
-                    .Select(x => new OrganizationDto(x.Id, x.Name))
                     .FirstOrDefaultAsync(x => x.Id == id);
+                var result = _organizationValidator.ValidateOrNull(organization);
+
+                if (!result.IsSuccess)
+                    return new BaseResult<OrganizationDto>
+                    {
+                        ErrorMessage = result.ErrorMessage,
+                        ErrorCode = result.ErrorCode,
+                    };
             }
             catch (Exception ex)
             {
@@ -179,7 +187,7 @@ namespace WebApi.Application.Services
 
             return new BaseResult<OrganizationDto>()
             {
-                Data = organization
+                Data = _mapper.Map<OrganizationDto>(organization),
             };
         }
     }

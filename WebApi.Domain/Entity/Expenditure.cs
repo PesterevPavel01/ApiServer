@@ -4,6 +4,7 @@ namespace WebApi.Domain.Entity
 {
     public class Expenditure : IEntityId<short> , IAuditable
     {
+        public Expenditure() { }
         public short Id { get ; set ; }
         public string Name { get ; set ; }
         public List<Document> Documents { get; set; }

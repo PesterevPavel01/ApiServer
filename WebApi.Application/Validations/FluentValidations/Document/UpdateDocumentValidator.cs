@@ -14,7 +14,7 @@ namespace WebApi.Application.Validations.FluentValidations.Document
         public UpdateDocumentValidator()
         {
             RuleFor(x => x.Value).NotEmpty();
-            RuleFor(x => x.Expenditure).NotEmpty();
+            RuleFor(x => x.Date).NotEmpty();
         }
     }
 }

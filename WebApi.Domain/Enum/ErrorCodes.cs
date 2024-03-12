@@ -20,6 +20,7 @@ namespace WebApi.Domain.Enum
         OrganizationsNotFound = 9,
         OrganizationNotFound = 10,
         OrganizationAlreadyExists = 11,
-        InternalServerError =12
+        InternalServerError =12,
+        DateIsInvalid = 13
     }
 }

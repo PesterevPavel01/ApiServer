@@ -10,6 +10,7 @@ using WebApi.Domain.Interfaces.Repositories;
 using WebApi.Domain.Interfaces.Services;
 using WebApi.Domain.Interfaces.Validations;
 using WebApi.Domain.Result;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace WebApi.Application.Services
 {
@@ -32,7 +33,7 @@ namespace WebApi.Application.Services
         {
             try
             {
-                var department = await _departmentRepository.GetAll().FirstOrDefaultAsync(x => x.Id == model.Id);
+                var department = await _departmentRepository.GetAll().FirstOrDefaultAsync(x => x.Name == model.Name);
                 var result = _departmentValidator.CreateValidator(department);
 
                 if (!result.IsSuccess)
@@ -160,12 +161,19 @@ namespace WebApi.Application.Services
 
         public async Task<BaseResult<DepartmentDto>> GetDepartmentByIdAsync(short id)
         {
-            DepartmentDto department;
+            Department department;
             try
             {
                 department = await _departmentRepository.GetAll()
-                    .Select(x => new DepartmentDto(x.Id, x.Name))
                     .FirstOrDefaultAsync(x => x.Id == id);
+                var result = _departmentValidator.ValidateOrNull(department);
+
+                if (!result.IsSuccess)
+                    return new BaseResult<DepartmentDto>
+                    {
+                        ErrorMessage = result.ErrorMessage,
+                        ErrorCode = result.ErrorCode,
+                    };
             }
             catch (Exception ex)
             {
@@ -179,7 +187,7 @@ namespace WebApi.Application.Services
 
             return new BaseResult<DepartmentDto>()
             {
-                Data = department
+                Data =  _mapper.Map<DepartmentDto>(department),
             };
         }
 

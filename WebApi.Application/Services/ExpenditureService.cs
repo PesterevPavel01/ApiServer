@@ -32,7 +32,7 @@ namespace WebApi.Application.Services
         {
             try
             {
-                var expenditure = await _expenditureRepository.GetAll().FirstOrDefaultAsync(x => x.Id == model.Id);
+                var expenditure = await _expenditureRepository.GetAll().FirstOrDefaultAsync(x => x.Name == model.Name);
                 var result = _expenditureValidator.CreateValidator(expenditure);
 
                 if (!result.IsSuccess)

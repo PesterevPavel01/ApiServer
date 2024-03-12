@@ -20,7 +20,7 @@ namespace WebApi.Domain.Interfaces.Services
         /// <param name="dateEnd"></param>
         /// <param name="expenditureId"></param>
         /// <returns></returns>
-        Task<CollectionResult<DocumentDto>> GetDocumentsByExpenditureAsync(DateTime dateStart, DateTime dateEnd, short expenditureId);
+        Task<CollectionResult<DocumentDto>> GetDocumentsByExpenditureAsync(DateTime dateStart, DateTime dateEnd, string expenditureName);
         
         /// <summary>
         /// Получение документо по Id
@@ -35,5 +35,19 @@ namespace WebApi.Domain.Interfaces.Services
         /// <param name="dto"></param>
         /// <returns></returns>
         Task<BaseResult<DocumentDto>> CreateDocumentAsync(CreateDocumentDto dto);
+
+        /// <summary>
+        /// Обновление документа
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        Task<BaseResult<DocumentDto>> UpdateDocumentAsync(DocumentDto model);
+
+        /// <summary>
+        /// Удаление документа по id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        Task <BaseResult<DocumentDto>> DeleteDocumentAsync(long id);
     }
 }

@@ -1,4 +1,4 @@
 ﻿namespace WebApi.Domain.Dto.Document
 {
-    public record OrganizationDto(short Id, string Name);
+    public record OrganizationDto(short? Id, string Name);
 }

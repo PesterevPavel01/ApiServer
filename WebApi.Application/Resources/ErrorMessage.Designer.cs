@@ -61,6 +61,15 @@ namespace WebApi.Application.Resources {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Date is invalid.
+        /// </summary>
+        internal static string DateIsInvalid {
+            get {
+                return ResourceManager.GetString("DateIsInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Department already exists.
         /// </summary>
         internal static string DepartmentAlreadyExists {

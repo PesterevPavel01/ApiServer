@@ -2,6 +2,6 @@
 
 namespace WebApi.Domain.Dto.Document
 {
-    public record CreateDocumentDto(String Name,double Value,string Comment,short ExpenditureId,short OrganizationId, short DepartmentId );
+    public record CreateDocumentDto(double Value, DateTime Date,string Comment,string Expenditure,string Organization, string Department );
 
 }

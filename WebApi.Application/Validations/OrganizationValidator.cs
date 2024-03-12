@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WebApi.Application.Resources;
+﻿using WebApi.Application.Resources;
 using WebApi.Domain.Entity;
 using WebApi.Domain.Enum;
 using WebApi.Domain.Interfaces.Validations;
@@ -18,8 +13,8 @@ namespace WebApi.Application.Validations
             if (model == null)
                 return new BaseResult()
                 {
-                    ErrorMessage = ErrorMessage.OrganizationNotFound,
-                    ErrorCode = (int)ErrorCodes.OrganizationNotFound,
+                    ErrorMessage = ErrorMessage.DepartmentNotFound,
+                    ErrorCode = (int)ErrorCodes.DepartmentNotFound,
                 };
             return new BaseResult();
         }

@@ -6,5 +6,5 @@ using System.Threading.Tasks;
 
 namespace WebApi.Domain.Dto.Document
 {
-    public record DepartmentDto(short Id,string Name);
+    public record DepartmentDto(short? Id,string Name);
 }

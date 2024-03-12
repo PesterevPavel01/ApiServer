@@ -16,4 +16,8 @@
 	<ProjectReference Include="..\WebApi.Application\WebApi.Application.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="logs\" />
+  </ItemGroup>
+
 </Project>

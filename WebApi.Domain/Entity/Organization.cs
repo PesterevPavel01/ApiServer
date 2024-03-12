@@ -5,6 +5,7 @@ namespace WebApi.Domain.Entity
 {
     public class Organization : IEntityId<short>, IAuditable
     {
+        public Organization() { }
         public short Id { get; set; }
         public string Name { get; set; }
         public List<Document> Documents { get; set; }

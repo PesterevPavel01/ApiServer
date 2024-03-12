@@ -9,9 +9,8 @@ namespace WebApi.DAL.Configurations
         public void Configure(EntityTypeBuilder<Document> builder)
         {
             builder.Property(x => x.Id).ValueGeneratedOnAdd();
-            builder.Property(x => x.Value).IsRequired();
-            builder.Property(x => x.ExpenditureID).IsRequired();
-            
+            builder.Property(x => x.Value).IsRequired();  
+            builder.Property(x=>x.Comment).HasMaxLength(255);
 
         }
     }
