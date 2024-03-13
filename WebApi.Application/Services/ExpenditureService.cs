@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using WebApi.Application.Resources;
+using WebApi.Application.Validations;
 using WebApi.Domain.Dto.Document;
 using WebApi.Domain.Entity;
 using WebApi.Domain.Enum;
@@ -65,6 +66,44 @@ namespace WebApi.Application.Services
             }
         }
 
+        public async Task<BaseResult<ExpenditureDto>> CreateMultiple(List<ExpenditureDto> listModel)
+        {
+            List<Expenditure> newExpenditures = new List<Expenditure>();
+            try
+            {
+                foreach (var expenditureDto in listModel)
+                {
+                    var expenditure = await _expenditureRepository.GetAll().FirstOrDefaultAsync(x => x.Name == expenditureDto.Name);
+                    var result = _expenditureValidator.CreateValidator(expenditure);
+
+                    if (!result.IsSuccess) continue;
+
+                    newExpenditures.Add(_mapper.Map<Expenditure>(expenditureDto));
+
+                }
+
+                if (newExpenditures.Count == 0)
+                    return new BaseResult<ExpenditureDto>()
+                    {
+                        ErrorMessage = ErrorMessage.NewExpendituresNotFound,
+                        ErrorCode = (int)ErrorCodes.NewExpendituresNotFound
+                    };
+
+                await _expenditureRepository.CreateMultipleAsync(newExpenditures);
+
+                return new BaseResult<ExpenditureDto>();
+
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, ex.Message);
+                return new BaseResult<ExpenditureDto>()
+                {
+                    ErrorMessage = ErrorMessage.InternalServerError,
+                    ErrorCode = (int)ErrorCodes.InternalServerError
+                };
+            }
+        }
         public async Task<BaseResult<ExpenditureDto>> UpdateAsync(ExpenditureDto model)
         {
             try

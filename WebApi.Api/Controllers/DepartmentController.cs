@@ -58,6 +58,19 @@ namespace WebApi.Api.Controllers
             return BadRequest();
         }
 
+        [HttpPost("all")]
+        public async Task<ActionResult<BaseResult<DepartmentDto>>> CreateMultipleDepartments([FromBody] List<DepartmentDto> departments)
+        {
+            if (departments != null)
+            {
+                var response = await _departmentService.CreateDepartmentsMultiple(departments);
+                
+                return response.IsSuccess ? Ok(response) : BadRequest(response);
+
+            }
+            return BadRequest();
+        }
+
         [HttpPatch()]
         public async Task<ActionResult<BaseResult<DepartmentDto>>> UpdateDepartment([FromBody] DepartmentDto department)
         {

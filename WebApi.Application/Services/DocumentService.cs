@@ -210,6 +210,55 @@ namespace WebApi.Application.Services
             }
         }
 
+        ///<inheritdoc/>
+        public async Task<BaseResult<DocumentDto>> CreateDocumentsMultipleAsync(List<CreateDocumentDto> listModels)
+        {
+            List<Document> newDocuments = new();
+            try
+            {
+                foreach (var documentModel in listModels)
+                {
+                    var document = new Document
+                    {
+                        Value = documentModel.Value,
+                        Comment = documentModel.Comment,
+                        Date = documentModel.Date
+                    };
+
+                    var department = await _departmentRepository.GetAll().FirstOrDefaultAsync(x => x.Name == documentModel.Department);
+                    if (department != null) document.DepartmentID = department.Id;
+
+                    var organization = await _organizationRepository.GetAll().FirstOrDefaultAsync(x => x.Name == documentModel.Organization);
+                    if (organization != null) document.OrganizationID = organization.Id;
+
+                    var expenditure = await _expenditureRepository.GetAll().FirstOrDefaultAsync(x => x.Name == documentModel.Expenditure);
+                    if (expenditure != null) document.ExpenditureID = expenditure.Id;
+
+                    newDocuments.Add(document);
+                }
+
+                if (newDocuments.Count == 0)
+                    return new BaseResult<DocumentDto>()
+                    {
+                        ErrorMessage = ErrorMessage.NewDocumentsNotFound,
+                        ErrorCode = (int)ErrorCodes.NewDocumentsNotFound
+                    };
+
+                await _documentRepository.CreateMultipleAsync(newDocuments);
+
+                return new BaseResult<DocumentDto>();
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, ex.Message);
+                return new BaseResult<DocumentDto>()
+                {
+                    ErrorMessage = ErrorMessage.InternalServerError,
+                    ErrorCode = (int)ErrorCodes.InternalServerError
+                };
+            }
+        }
+
         public async Task<BaseResult<DocumentDto>> UpdateDocumentAsync(DocumentDto model)
         {
             try
@@ -251,6 +300,7 @@ namespace WebApi.Application.Services
             }
         }
 
+        ///<inheritdoc/>
         public async Task<BaseResult<DocumentDto>> DeleteDocumentAsync(long id)
         {
             try

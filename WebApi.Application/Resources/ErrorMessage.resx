@@ -157,6 +157,22 @@
     <value>Internal server error</value>
     <comment>Внутренняя ошибка сервера</comment>
   </data>
+  <data name="NewDepartmentsNotFound" xml:space="preserve">
+    <value>New departments not found</value>
+    <comment>Нет ни одного нового подразделения</comment>
+  </data>
+  <data name="NewDocumentsNotFound" xml:space="preserve">
+    <value>New documents not found</value>
+    <comment>Нет ни одного нового документа</comment>
+  </data>
+  <data name="NewExpendituresNotFound" xml:space="preserve">
+    <value>New expenditures not found</value>
+    <comment>Нет ни одной новой статьи затрат</comment>
+  </data>
+  <data name="NewOrganizationsNotFound" xml:space="preserve">
+    <value>New organizations not found</value>
+    <comment>Нет ни одной новой организации</comment>
+  </data>
   <data name="OrganizationAlreadyExists" xml:space="preserve">
     <value>Organization already exists</value>
     <comment>Такая организация уже существует</comment>

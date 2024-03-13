@@ -23,6 +23,17 @@ namespace WebApi.DAL.Repositories
             return Task.FromResult(entity);
         }
 
+        public Task<bool> CreateMultipleAsync(List<TEntity> entitys)
+        {
+            if (entitys.Count == 0)
+                throw new ArgumentNullException("Entitys count 0");
+
+            _dbContext.AddRange(entitys);
+            _dbContext.SaveChanges();
+
+            return Task.FromResult(true);
+        }
+
         public IQueryable<TEntity> GetAll()
         {
             return _dbContext.Set<TEntity>();
@@ -37,6 +48,20 @@ namespace WebApi.DAL.Repositories
             _dbContext.SaveChanges();
 
             return Task.FromResult(entity);
+        }
+
+        public Task<bool> SaveChangesAsync()
+        {
+            try 
+            {
+                _dbContext.SaveChanges();
+                return Task.FromResult(true);
+            }
+            catch 
+            { 
+            return Task.FromResult(false);
+            }
+            
         }
 
         public Task<TEntity> UpdateAsync(TEntity entity)

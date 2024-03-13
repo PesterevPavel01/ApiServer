@@ -29,6 +29,45 @@ namespace WebApi.Application.Services
             _logger = logger;
         }
 
+        public async Task<BaseResult<DepartmentDto>> CreateDepartmentsMultiple(List<DepartmentDto> listModel)
+        {
+            List<Department> newDepartments = new List<Department>();
+            try
+            {
+                foreach (var dept in listModel)
+                {
+                    var department = await _departmentRepository.GetAll().FirstOrDefaultAsync(x => x.Name == dept.Name);
+                    var result = _departmentValidator.CreateValidator(department);
+
+                    if (!result.IsSuccess) continue;
+
+                    newDepartments.Add(_mapper.Map<Department>(dept));
+
+                }
+
+                if(newDepartments.Count==0)
+                    return new BaseResult<DepartmentDto>()
+                    {
+                        ErrorMessage = ErrorMessage.NewDepartmentsNotFound,
+                        ErrorCode = (int)ErrorCodes.NewDepartmentsNotFound
+                    };
+
+                await _departmentRepository.CreateMultipleAsync(newDepartments);
+
+                return new BaseResult<DepartmentDto>();
+
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, ex.Message);
+                return new BaseResult<DepartmentDto>()
+                {
+                    ErrorMessage = ErrorMessage.InternalServerError,
+                    ErrorCode = (int)ErrorCodes.InternalServerError
+                };
+            }
+        }
+
         public async Task<BaseResult<DepartmentDto>> CreateDepartmentAsync(DepartmentDto model)
         {
             try

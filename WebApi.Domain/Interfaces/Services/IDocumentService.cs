@@ -37,6 +37,13 @@ namespace WebApi.Domain.Interfaces.Services
         Task<BaseResult<DocumentDto>> CreateDocumentAsync(CreateDocumentDto dto);
 
         /// <summary>
+        /// Создание нескольких документов с базовыми параметрами
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        Task<BaseResult<DocumentDto>> CreateDocumentsMultipleAsync(List<CreateDocumentDto> listModels);
+
+        /// <summary>
         /// Обновление документа
         /// </summary>
         /// <param name="dto"></param>

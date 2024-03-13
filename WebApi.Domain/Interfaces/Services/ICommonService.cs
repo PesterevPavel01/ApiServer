@@ -13,6 +13,7 @@ namespace WebApi.Domain.Interfaces.Services
         Task<CollectionResult<T>> GetAllAsync();
         Task<BaseResult<T>> GetByIdAsync(Id id);
         Task<BaseResult<T>> CreateAsync(T model);
+        Task<BaseResult<T>> CreateMultiple(List<T> listModel);
         Task<BaseResult<T>> UpdateAsync(T model);
         Task<BaseResult<T>> DeleteAsync(Id id);
     }

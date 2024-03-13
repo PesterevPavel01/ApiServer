@@ -9,6 +9,7 @@ namespace WebApi.Domain.Interfaces.Services
         Task<CollectionResult<DepartmentDto>> GetDepartmentsAsync();
         Task<BaseResult<DepartmentDto>> GetDepartmentByIdAsync(short id);
         Task<BaseResult<DepartmentDto>> CreateDepartmentAsync(DepartmentDto model);
+        Task<BaseResult<DepartmentDto>> CreateDepartmentsMultiple(List<DepartmentDto> listModel);
         Task<BaseResult<DepartmentDto>> UpdateDepartmentAsync(DepartmentDto model);
         Task<BaseResult<DepartmentDto>> DeleteDepartmentAsync(short id);
 

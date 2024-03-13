@@ -66,6 +66,45 @@ namespace WebApi.Application.Services
             }
         }
 
+        public async Task<BaseResult<OrganizationDto>> CreateMultiple(List<OrganizationDto> listModel)
+        {
+            List<Organization> newOrganizations = new List<Organization>();
+            try
+            {
+                foreach (var OrganizationDto in listModel)
+                {
+                    var organization = await _organizationRepository.GetAll().FirstOrDefaultAsync(x => x.Name == OrganizationDto.Name);
+                    var result = _organizationValidator.CreateValidator(organization);
+
+                    if (!result.IsSuccess) continue;
+
+                    newOrganizations.Add(_mapper.Map<Organization>(OrganizationDto));
+
+                }
+
+                if (newOrganizations.Count == 0)
+                    return new BaseResult<OrganizationDto>()
+                    {
+                        ErrorMessage = ErrorMessage.NewOrganizationsNotFound,
+                        ErrorCode = (int)ErrorCodes.NewOrganizationsNotFound
+                    };
+
+                await _organizationRepository.CreateMultipleAsync(newOrganizations);
+
+                return new BaseResult<OrganizationDto>();
+
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, ex.Message);
+                return new BaseResult<OrganizationDto>()
+                {
+                    ErrorMessage = ErrorMessage.InternalServerError,
+                    ErrorCode = (int)ErrorCodes.InternalServerError
+                };
+            }
+        }
+
         public async Task<BaseResult<OrganizationDto>> UpdateAsync(OrganizationDto model)
         {
             try

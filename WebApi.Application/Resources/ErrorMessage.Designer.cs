@@ -151,6 +151,42 @@ namespace WebApi.Application.Resources {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на New departments not found.
+        /// </summary>
+        internal static string NewDepartmentsNotFound {
+            get {
+                return ResourceManager.GetString("NewDepartmentsNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на New documents not found.
+        /// </summary>
+        internal static string NewDocumentsNotFound {
+            get {
+                return ResourceManager.GetString("NewDocumentsNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на New expenditures not found.
+        /// </summary>
+        internal static string NewExpendituresNotFound {
+            get {
+                return ResourceManager.GetString("NewExpendituresNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на New organizations not found.
+        /// </summary>
+        internal static string NewOrganizationsNotFound {
+            get {
+                return ResourceManager.GetString("NewOrganizationsNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Organization already exists.
         /// </summary>
         internal static string OrganizationAlreadyExists {

@@ -58,6 +58,19 @@ namespace WebApi.Api.Controllers
             return BadRequest();
         }
 
+        [HttpPost("all")]
+        public async Task<ActionResult<BaseResult<ExpenditureDto>>> CreateMultipleOrganizations([FromBody] List<OrganizationDto> organizations)
+        {
+            if (organizations != null)
+            {
+                var response = await _organizationService.CreateMultiple(organizations);
+
+                return response.IsSuccess ? Ok(response) : BadRequest(response);
+
+            }
+            return BadRequest();
+        }
+
         [HttpPatch()]
         public async Task<ActionResult<BaseResult<OrganizationDto>>> UpdateOrganization([FromBody] OrganizationDto organization)
         {

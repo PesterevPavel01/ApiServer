@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using WebApi.Application.Services;
 using WebApi.Domain.Dto.Document;
+using WebApi.Domain.Entity;
 using WebApi.Domain.Interfaces.Services;
 using WebApi.Domain.Result;
 
@@ -53,6 +55,19 @@ namespace WebApi.Api.Controllers
                 if (response.IsSuccess) return Ok(response);
 
                 return BadRequest(response);
+            }
+            return BadRequest();
+        }
+
+        [HttpPost("all")]
+        public async Task<ActionResult<BaseResult<ExpenditureDto>>> CreateMultipleExpenditures([FromBody] List<ExpenditureDto> expenditures)
+        {
+            if (expenditures != null)
+            {
+                var response = await _expenditureService.CreateMultiple(expenditures);
+
+                return response.IsSuccess ? Ok(response) : BadRequest(response);
+
             }
             return BadRequest();
         }
