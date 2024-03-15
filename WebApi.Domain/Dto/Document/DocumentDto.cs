@@ -40,5 +40,7 @@ namespace WebApi.Domain.Dto.Document
             Date = document.Date;
             Comment = document.Comment;
         }
+
+        public DocumentDto(){ }
     }
 }

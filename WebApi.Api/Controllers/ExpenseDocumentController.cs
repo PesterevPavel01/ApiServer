@@ -33,7 +33,7 @@ namespace WebApi.Api.Controllers
             return BadRequest(response);
         }
 
-        [HttpGet()]
+        [HttpPost("get")]
         public async Task<ActionResult<CollectionResult<DocumentDto>>> GetDocuments([FromBody] List<DateTime> dates)
         {
 

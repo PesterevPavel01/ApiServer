@@ -274,13 +274,29 @@ namespace WebApi.Application.Services
                     };
 
                 var department = await _departmentRepository.GetAll().FirstOrDefaultAsync(x => x.Name == model.Department);
-                if (department != null) document.DepartmentID = department.Id;
+                if (department != null)
+                {
+                    document.DepartmentID = department.Id; 
+                    document.Department = department;
+                }
 
                 var organization = await _organizationRepository.GetAll().FirstOrDefaultAsync(x => x.Name == model.Organization);
-                if (organization != null) document.OrganizationID = organization.Id;
+                if (organization != null) 
+                { 
+                    document.OrganizationID = organization.Id;
+                    document.Organization = organization;
+                }
 
-                var expenditure = await _organizationRepository.GetAll().FirstOrDefaultAsync(x => x.Name == model.Expenditure);
-                if (expenditure != null) document.ExpenditureID = expenditure.Id;
+                var expenditure = await _expenditureRepository.GetAll().FirstOrDefaultAsync(x => x.Name == model.Expenditure);
+                if (expenditure != null)
+                {
+                    document.ExpenditureID = expenditure.Id;
+                    document.Expenditure = expenditure;
+                }
+
+                document.Comment = model.Comment;
+                document.Date = model.Date;
+                document.Value = model.Value;
 
                 await _documentRepository.UpdateAsync(document);
 

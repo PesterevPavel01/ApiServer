@@ -199,12 +199,20 @@ namespace WebApi.Application.Services
 
         public async Task<BaseResult<ExpenditureDto>> GetByIdAsync(short id)
         {
-            ExpenditureDto expenditure;
+            Expenditure expenditure;
             try
             {
                 expenditure = await _expenditureRepository.GetAll()
-                    .Select(x => new ExpenditureDto(x.Id, x.Name))
                     .FirstOrDefaultAsync(x => x.Id == id);
+
+                var result = _expenditureValidator.ValidateOrNull(expenditure);
+
+                if (!result.IsSuccess)
+                    return new BaseResult<ExpenditureDto>
+                    {
+                        ErrorMessage = result.ErrorMessage,
+                        ErrorCode = result.ErrorCode,
+                    };
             }
             catch (Exception ex)
             {
@@ -218,7 +226,8 @@ namespace WebApi.Application.Services
 
             return new BaseResult<ExpenditureDto>()
             {
-                Data = expenditure
+                Data = _mapper.Map<ExpenditureDto>(expenditure),
+                
             };
         }
     }
