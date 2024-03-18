@@ -82,8 +82,8 @@ namespace WebApi.Api.Controllers
             return BadRequest();
         }
 
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<BaseResult<DocumentDto>>> DeleteDocument(long id)
+        [HttpDelete()]
+        public async Task<ActionResult<BaseResult<DocumentDto>>> DeleteDocument([FromBody] long id)
         {
             var response = await _documentService.DeleteDocumentAsync(id);
 
