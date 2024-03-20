@@ -86,8 +86,8 @@ namespace WebApi.Api.Controllers
             return BadRequest();
         }
 
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<BaseResult<ExpenditureDto>>> DeleteExpenditure(short id)
+        [HttpDelete()]
+        public async Task<ActionResult<BaseResult<ExpenditureDto>>> DeleteExpenditure([FromBody] short id)
         {
             var response = await _expenditureService.DeleteAsync(id);
 

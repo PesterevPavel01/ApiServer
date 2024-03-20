@@ -85,8 +85,8 @@ namespace WebApi.Api.Controllers
             return BadRequest();
         }
 
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<BaseResult<OrganizationDto>>> DeleteOrganization(short id)
+        [HttpDelete()]
+        public async Task<ActionResult<BaseResult<OrganizationDto>>> DeleteOrganization([FromBody] short id)
         {
             var response = await _organizationService.DeleteAsync(id);
 
