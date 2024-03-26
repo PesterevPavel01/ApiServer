@@ -26,5 +26,11 @@ namespace WebApi.Domain.Enum
         NewExpendituresNotFound = 15,
         NewOrganizationsNotFound = 16,
         NewDocumentsNotFound = 17,
+        IncorrectPeriod=18,
+        IncorrectInputObject=19,
+        UserNotFound=20,
+        UserAlreadyExists=21,
+        TargetNotFound=22,
+        TargetAlreadyExists=23,
     }
 }

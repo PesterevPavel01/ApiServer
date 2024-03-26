@@ -1,9 +1,12 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
+using System.Collections.ObjectModel;
 using WebApi.Application.Resources;
 using WebApi.Application.Validations;
 using WebApi.Domain.Dto.Document;
+using WebApi.Domain.Dto.Order;
+using WebApi.Domain.Dto.Report;
 using WebApi.Domain.Entity;
 using WebApi.Domain.Enum;
 using WebApi.Domain.Interfaces.Repositories;
@@ -19,6 +22,7 @@ namespace WebApi.Application.Services
         private readonly IBaseRepository<Department> _departmentRepository;
         private readonly IBaseRepository<Organization> _organizationRepository;
         private readonly IBaseRepository<Expenditure> _expenditureRepository;
+        private readonly IBaseRepository<User> _userRepository;
         private readonly IDocumentValidator _documentValidator;
         private readonly IExpenditureValidator _expenditureValidator;
         private readonly ILogger _logger;
@@ -28,7 +32,11 @@ namespace WebApi.Application.Services
             IBaseRepository<Department>departmentRepository,
             IBaseRepository<Organization> organizationRepository,
             IBaseRepository<Expenditure> expenditureRepository,
-            IDocumentValidator departmentValidator, IExpenditureValidator expenditureValidator, IMapper mapper, ILogger logger)
+            IBaseRepository<User> userRepository,
+            IDocumentValidator departmentValidator,
+            IExpenditureValidator expenditureValidator,
+            IMapper mapper, ILogger logger
+            )
         {
             _documentRepository = documentRepository;
             _documentValidator = departmentValidator;
@@ -38,11 +46,14 @@ namespace WebApi.Application.Services
             _mapper = mapper;
             _logger = logger;
             _expenditureValidator = expenditureValidator;
+            _userRepository = userRepository;
         }
 
         ///<inheritdoc/>
         public async Task<CollectionResult<DocumentDto>> GetDocumentsAsync(DateTime dateStart, DateTime dateEnd)
         {
+            if(dateStart>dateEnd) return new CollectionResult<DocumentDto>() { ErrorMessage= ErrorMessage.IncorrectPeriod,ErrorCode=(int)ErrorCodes.IncorrectPeriod };
+            
             DocumentDto[] documents;
 
             try
@@ -81,6 +92,8 @@ namespace WebApi.Application.Services
         ///<inheritdoc/>
         public async Task<CollectionResult<DocumentDto>> GetDocumentsByExpenditureAsync(DateTime dateStart, DateTime dateEnd, string expenditureName)
         {
+            if (dateStart > dateEnd) return new CollectionResult<DocumentDto>() { ErrorMessage = ErrorMessage.IncorrectPeriod, ErrorCode = (int)ErrorCodes.IncorrectPeriod };
+
             DocumentDto[] documents;
 
             var expenditure = await _expenditureRepository.GetAll().FirstOrDefaultAsync(x => x.Name == expenditureName);
@@ -175,6 +188,7 @@ namespace WebApi.Application.Services
         ///<inheritdoc/>
         public async Task<BaseResult<DocumentDto>> CreateDocumentAsync(CreateDocumentDto model)
         {
+            if (model == null) return new BaseResult<DocumentDto>() { ErrorMessage = ErrorMessage.IncorrectInputObject, ErrorCode = (int)ErrorCodes.IncorrectInputObject };
             try
             {
                 var document = new Document {
@@ -213,6 +227,8 @@ namespace WebApi.Application.Services
         ///<inheritdoc/>
         public async Task<BaseResult<DocumentDto>> CreateDocumentsMultipleAsync(List<CreateDocumentDto> listModels)
         {
+            if (listModels == null) return new BaseResult<DocumentDto>() { ErrorMessage = ErrorMessage.IncorrectInputObject, ErrorCode = (int)ErrorCodes.IncorrectInputObject };
+
             List<Document> newDocuments = new();
             try
             {
@@ -261,6 +277,8 @@ namespace WebApi.Application.Services
 
         public async Task<BaseResult<DocumentDto>> UpdateDocumentAsync(DocumentDto model)
         {
+            if (model == null) return new BaseResult<DocumentDto>() { ErrorMessage = ErrorMessage.IncorrectInputObject, ErrorCode = (int)ErrorCodes.IncorrectInputObject };
+
             try
             {
                 var document = await _documentRepository.GetAll().FirstOrDefaultAsync(x => x.Id == model.Id);
@@ -346,6 +364,60 @@ namespace WebApi.Application.Services
                 {
                     ErrorMessage = ErrorMessage.InternalServerError,
                     ErrorCode = (int)ErrorCodes.InternalServerError
+                };
+            }
+        }
+
+        public async Task<CollectionResult<ExpenseReportDto>> GetReportAsync(ReportArgument argument)
+        {
+            
+            try
+            {
+                var documents= await _documentRepository.GetAll().Where(x => x.Date >= argument.dateStart && x.Date <= argument.dateEnd).ToListAsync();
+
+                var user = await _userRepository.GetAll().FirstOrDefaultAsync(x=>x.Name== argument.user);
+
+                if (user==null)
+                    return new CollectionResult<ExpenseReportDto>
+                    {
+                        ErrorMessage = ErrorMessage.UserNotFound,
+                        ErrorCode = (int)ErrorCodes.UserNotFound,
+                    };
+
+                var report = from d in documents
+                             join e in _expenditureRepository.GetAll().Where(x => x.UserID == user.Id).ToList()
+                             on d.ExpenditureID equals e.Id
+                             select new { Value = d.Value, Expenditure = e.Name };
+
+                if (!report.Any())
+                {
+                    return new CollectionResult<ExpenseReportDto>()
+                    {
+                        ErrorMessage = ErrorMessage.DocumentsNotFound,
+                        ErrorCode = (int)ErrorCodes.DocumentsNotFound
+                    };
+                }
+
+                List<ExpenseReportDto> expenseReport = report
+                    .GroupBy(x=>x.Expenditure)
+                    .Select(er=>
+                    new ExpenseReportDto(er.First().Expenditure,er.Sum(d=>d.Value))
+                    ).ToList();
+
+                return new CollectionResult<ExpenseReportDto>
+                {
+                    Count = expenseReport.Count(),
+                    Data = expenseReport,
+                };
+
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, ex.Message);
+                return new CollectionResult<ExpenseReportDto>
+                {
+                    ErrorMessage = ErrorMessage.InternalServerError,
+                    ErrorCode = (int)ErrorCodes.InternalServerError,
                 };
             }
         }

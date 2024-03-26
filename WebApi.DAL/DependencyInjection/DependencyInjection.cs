@@ -30,6 +30,8 @@ namespace WebApi.DAL.DependencyInjection
             services.AddScoped<IBaseRepository<Document>, BaseRepository<Document>>();
             services.AddScoped<IBaseRepository<Expenditure>, BaseRepository<Expenditure>>();
             services.AddScoped<IBaseRepository<Organization>, BaseRepository<Organization>>();
+            services.AddScoped<IBaseRepository<User>, BaseRepository<User>>();
+            services.AddScoped<IBaseRepository<Target>, BaseRepository<Target>>();
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
-using Serilog.Core;
 using WebApi.Application.Resources;
 using WebApi.Domain.Dto.Document;
 using WebApi.Domain.Entity;
@@ -10,7 +9,6 @@ using WebApi.Domain.Interfaces.Repositories;
 using WebApi.Domain.Interfaces.Services;
 using WebApi.Domain.Interfaces.Validations;
 using WebApi.Domain.Result;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace WebApi.Application.Services
 {
@@ -29,12 +27,14 @@ namespace WebApi.Application.Services
             _logger = logger;
         }
 
-        public async Task<BaseResult<DepartmentDto>> CreateDepartmentsMultiple(List<DepartmentDto> listModel)
+        public async Task<BaseResult<DepartmentDto>> CreateDepartmentsMultiple(List<DepartmentDto> listModels)
         {
+            if (listModels == null) return new BaseResult<DepartmentDto>() { ErrorMessage = ErrorMessage.IncorrectInputObject, ErrorCode = (int)ErrorCodes.IncorrectInputObject };
+
             List<Department> newDepartments = new List<Department>();
             try
             {
-                foreach (var dept in listModel)
+                foreach (var dept in listModels)
                 {
                     var department = await _departmentRepository.GetAll().FirstOrDefaultAsync(x => x.Name == dept.Name);
                     var result = _departmentValidator.CreateValidator(department);
@@ -70,6 +70,8 @@ namespace WebApi.Application.Services
 
         public async Task<BaseResult<DepartmentDto>> CreateDepartmentAsync(DepartmentDto model)
         {
+            if (model == null) return new BaseResult<DepartmentDto>() { ErrorMessage = ErrorMessage.IncorrectInputObject, ErrorCode = (int)ErrorCodes.IncorrectInputObject };
+
             try
             {
                 var department = await _departmentRepository.GetAll().FirstOrDefaultAsync(x => x.Name == model.Name);
@@ -107,6 +109,7 @@ namespace WebApi.Application.Services
 
         public async Task<BaseResult<DepartmentDto>> UpdateDepartmentAsync(DepartmentDto model)
         {
+            if (model == null) return new BaseResult<DepartmentDto>() { ErrorMessage = ErrorMessage.IncorrectInputObject, ErrorCode = (int)ErrorCodes.IncorrectInputObject };
             try
             {
                 var department = await _departmentRepository.GetAll().FirstOrDefaultAsync(x => x.Id == model.Id);

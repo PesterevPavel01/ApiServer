@@ -27,9 +27,7 @@ namespace WebApi.Api.Controllers
         {
             var response = await _departmentService.GetDepartmentByIdAsync(id);
 
-            if (response.IsSuccess) return Ok(response);
-
-            return BadRequest(response);
+            return Ok(response);
         }
 
         [HttpGet()]
@@ -38,50 +36,35 @@ namespace WebApi.Api.Controllers
 
             var response = await _departmentService.GetDepartmentsAsync();
 
-            if (response.IsSuccess) return Ok(response);
+            return Ok(response);
 
-            return BadRequest(response);
         }
 
         [HttpPost()]
         public async Task<ActionResult<BaseResult<DepartmentDto>>> CreateDepartment([FromBody] DepartmentDto department)
         {
-            if (department != null)
-            {
                 var response = await _departmentService.CreateDepartmentAsync(department);
 
-                if (response.IsSuccess) return Ok(response);
-
-                return BadRequest(response);
-            }
-            return BadRequest();
+                return Ok(response);
         }
 
         [HttpPost("all")]
         public async Task<ActionResult<BaseResult<DepartmentDto>>> CreateMultipleDepartments([FromBody] List<DepartmentDto> departments)
         {
-            if (departments != null)
-            {
                 var response = await _departmentService.CreateDepartmentsMultiple(departments);
-                
-                return response.IsSuccess ? Ok(response) : BadRequest(response);
 
-            }
-            return BadRequest();
+            return Ok(response);
+
         }
 
         [HttpPatch()]
         public async Task<ActionResult<BaseResult<DepartmentDto>>> UpdateDepartment([FromBody] DepartmentDto department)
         {
-            if (department != null)
-            {
+
                 var response = await _departmentService.UpdateDepartmentAsync(department);
 
-                if (response.IsSuccess) return Ok(response);
+                 return Ok(response);
 
-                return BadRequest(response);
-            }
-            return BadRequest();
         }
 
         [HttpDelete()]
@@ -89,9 +72,8 @@ namespace WebApi.Api.Controllers
         {
                 var response = await _departmentService.DeleteDepartmentAsync(id);
 
-                if (response.IsSuccess) return Ok(response);
+               return Ok(response);
 
-                return BadRequest(response);
         }
     }
 }

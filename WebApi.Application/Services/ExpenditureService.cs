@@ -31,6 +31,7 @@ namespace WebApi.Application.Services
 
         public async Task<BaseResult<ExpenditureDto>> CreateAsync(ExpenditureDto model)
         {
+            if (model == null) return new BaseResult<ExpenditureDto>() { ErrorMessage = ErrorMessage.IncorrectInputObject, ErrorCode = (int)ErrorCodes.IncorrectInputObject }; 
             try
             {
                 var expenditure = await _expenditureRepository.GetAll().FirstOrDefaultAsync(x => x.Name == model.Name);
@@ -68,6 +69,8 @@ namespace WebApi.Application.Services
 
         public async Task<BaseResult<ExpenditureDto>> CreateMultiple(List<ExpenditureDto> listModel)
         {
+            if (listModel == null) return new BaseResult<ExpenditureDto>() { ErrorMessage = ErrorMessage.IncorrectInputObject, ErrorCode = (int)ErrorCodes.IncorrectInputObject };
+
             List<Expenditure> newExpenditures = new List<Expenditure>();
             try
             {
@@ -106,6 +109,7 @@ namespace WebApi.Application.Services
         }
         public async Task<BaseResult<ExpenditureDto>> UpdateAsync(ExpenditureDto model)
         {
+            if (model == null) return new BaseResult<ExpenditureDto>() { ErrorMessage = ErrorMessage.IncorrectInputObject, ErrorCode = (int)ErrorCodes.IncorrectInputObject };
             try
             {
                 var expenditure = await _expenditureRepository.GetAll().FirstOrDefaultAsync(x => x.Id == model.Id);

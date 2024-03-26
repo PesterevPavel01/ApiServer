@@ -22,6 +22,11 @@ namespace WebApi.DAL.Configurations
                 .HasForeignKey(x => x.ExpenditureID)
                 .HasPrincipalKey(x => x.Id);
 
+            builder.HasMany<Target>(x => x.Targets)
+                .WithOne(x => x.Expenditure)
+                .HasForeignKey(x => x.ExpenditureID)
+                .HasPrincipalKey(x => x.Id);
+
         }
     }
 }

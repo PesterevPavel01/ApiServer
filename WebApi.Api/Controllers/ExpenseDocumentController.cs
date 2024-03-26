@@ -28,9 +28,7 @@ namespace WebApi.Api.Controllers
         {
             var response = await _documentService.GetDocumentByIdAsync(id);
 
-            if (response.IsSuccess) return Ok(response);
-
-            return BadRequest(response);
+            return Ok(response);
         }
 
         [HttpPost("get")]
@@ -39,9 +37,8 @@ namespace WebApi.Api.Controllers
 
             var response = await _documentService.GetDocumentsAsync(dates[0], dates[1]);
 
-            if (response.IsSuccess) return Ok(response);
+            return Ok(response);
 
-            return BadRequest(response);
         }
 
         [HttpPost("{expenditure}")]
@@ -49,37 +46,23 @@ namespace WebApi.Api.Controllers
         {
             var response = await _documentService.GetDocumentsByExpenditureAsync(dates[0], dates[1], expenditure);
 
-            if (response.IsSuccess) return Ok(response);
-
-            return BadRequest(response);
+            return Ok(response);
         }
 
         [HttpPost()]
         public async Task<ActionResult<BaseResult<CreateDocumentDto>>> CreateDocument ([FromBody] CreateDocumentDto document)
         {
-            if (document != null)
-            {
                 var response = await _documentService.CreateDocumentAsync(document);
 
-                if (response.IsSuccess) return Ok(response);
-
-                return BadRequest(response);
-            }
-            return BadRequest();
+                return Ok(response);
         }
 
         [HttpPatch()]
         public async Task<ActionResult<BaseResult<CreateDocumentDto>>> UpdateDocument([FromBody] DocumentDto document)
         {
-            if (document != null)
-            {
                 var response = await _documentService.UpdateDocumentAsync(document);
 
-                if (response.IsSuccess) return Ok(response);
-
-                return BadRequest(response);
-            }
-            return BadRequest();
+                return Ok(response);
         }
 
         [HttpDelete()]
@@ -87,9 +70,7 @@ namespace WebApi.Api.Controllers
         {
             var response = await _documentService.DeleteDocumentAsync(id);
 
-            if (response.IsSuccess) return Ok(response);
-
-            return BadRequest(response);
+            return Ok(response);
         }
     }
 }

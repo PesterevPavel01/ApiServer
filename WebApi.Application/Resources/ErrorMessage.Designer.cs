@@ -142,6 +142,24 @@ namespace WebApi.Application.Resources {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Incorrect input object.
+        /// </summary>
+        internal static string IncorrectInputObject {
+            get {
+                return ResourceManager.GetString("IncorrectInputObject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Incorrect period.
+        /// </summary>
+        internal static string IncorrectPeriod {
+            get {
+                return ResourceManager.GetString("IncorrectPeriod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Internal server error.
         /// </summary>
         internal static string InternalServerError {
@@ -201,6 +219,42 @@ namespace WebApi.Application.Resources {
         internal static string OrganizationNotFound {
             get {
                 return ResourceManager.GetString("OrganizationNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Target alresdy exists.
+        /// </summary>
+        internal static string TargetAlreadyExists {
+            get {
+                return ResourceManager.GetString("TargetAlreadyExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Target not found.
+        /// </summary>
+        internal static string TargetNotFound {
+            get {
+                return ResourceManager.GetString("TargetNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на User already exists.
+        /// </summary>
+        internal static string UserAlreadyExists {
+            get {
+                return ResourceManager.GetString("UserAlreadyExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на User not found.
+        /// </summary>
+        internal static string UserNotFound {
+            get {
+                return ResourceManager.GetString("UserNotFound", resourceCulture);
             }
         }
     }

@@ -1,4 +1,6 @@
 ﻿using WebApi.Domain.Dto.Document;
+using WebApi.Domain.Dto.Order;
+using WebApi.Domain.Dto.Report;
 using WebApi.Domain.Result;
 
 namespace WebApi.Domain.Interfaces.Services
@@ -56,5 +58,12 @@ namespace WebApi.Domain.Interfaces.Services
         /// <param name="id"></param>
         /// <returns></returns>
         Task <BaseResult<DocumentDto>> DeleteDocumentAsync(long id);
+
+        /// <summary>
+        /// Получение отчета по пользователю
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        Task<CollectionResult<ExpenseReportDto>> GetReportAsync(ReportArgument argument);
     }
 }

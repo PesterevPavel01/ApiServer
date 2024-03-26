@@ -31,6 +31,7 @@ namespace WebApi.Application.Services
 
         public async Task<BaseResult<OrganizationDto>> CreateAsync(OrganizationDto model)
         {
+            if (model == null) return new BaseResult<OrganizationDto>() { ErrorMessage = ErrorMessage.IncorrectInputObject, ErrorCode = (int)ErrorCodes.IncorrectInputObject };
             try
             {
                 var organization = await _organizationRepository.GetAll().FirstOrDefaultAsync(x => x.Name == model.Name);
@@ -68,6 +69,8 @@ namespace WebApi.Application.Services
 
         public async Task<BaseResult<OrganizationDto>> CreateMultiple(List<OrganizationDto> listModel)
         {
+            if (listModel == null) return new BaseResult<OrganizationDto>() { ErrorMessage = ErrorMessage.IncorrectInputObject, ErrorCode = (int)ErrorCodes.IncorrectInputObject };
+
             List<Organization> newOrganizations = new List<Organization>();
             try
             {
@@ -107,6 +110,7 @@ namespace WebApi.Application.Services
 
         public async Task<BaseResult<OrganizationDto>> UpdateAsync(OrganizationDto model)
         {
+            if (model == null) return new BaseResult<OrganizationDto>() { ErrorMessage = ErrorMessage.IncorrectInputObject, ErrorCode = (int)ErrorCodes.IncorrectInputObject };
             try
             {
                 var organization = await _organizationRepository.GetAll().FirstOrDefaultAsync(x => x.Id == model.Id);
