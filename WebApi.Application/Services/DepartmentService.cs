@@ -83,6 +83,7 @@ namespace WebApi.Application.Services
                         ErrorMessage = result.ErrorMessage,
                         ErrorCode = result.ErrorCode,
                     };
+
                 department=new Department
                 {
                     Name=model.Name 

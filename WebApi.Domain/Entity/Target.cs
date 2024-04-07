@@ -7,13 +7,14 @@ using WebApi.Domain.Interfaces;
 
 namespace WebApi.Domain.Entity
 {
-    public class Target : IEntityId<short>, IAuditable
+    public class Target : IEntityId<long>, IAuditable
     {
-        public short Id { get; set; }
+        public long Id { get; set; }
         public double Value { get; set; }
         public Expenditure Expenditure { get; set; }
         public short? ExpenditureID { get; set; }
-        public DateTime Date { get; set; }
+        public short Month { get; set; }
+        public short Year { get; set; }
         public DateTime CreatedAt { get ; set; }
         public DateTime UpdatedAt { get; set; }
     }

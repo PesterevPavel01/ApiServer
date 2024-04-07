@@ -25,6 +25,7 @@ namespace WebApi.Application.DependencyInjection
             services.AddAutoMapper(typeof(DepartmentMapping));
             services.AddAutoMapper(typeof(OrganizationMapping));
             services.AddAutoMapper(typeof(ExpenditureMapping));
+            services.AddAutoMapper(typeof(TargetMapping));
 
             InitServices(services);
         }
@@ -56,6 +57,7 @@ namespace WebApi.Application.DependencyInjection
             services.AddScoped<IDepartmentService, DepartmentService>();
             services.AddScoped<ICommonService<OrganizationDto, short>, OrganizationService>();
             services.AddScoped<ICommonService<ExpenditureDto, short>, ExpenditureService>();
+            services.AddScoped<ICommonService <TargetDto , long>, TargetService>();
         }
     }
 }

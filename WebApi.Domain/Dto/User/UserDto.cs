@@ -6,5 +6,5 @@ using System.Threading.Tasks;
 
 namespace WebApi.Domain.Dto.User
 {
-    public record UserDto(short? Id, string Name);
+    public record UserDto(short? Id, string Name, string Login,string Password);
 }

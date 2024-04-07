@@ -25,8 +25,8 @@ namespace WebApi.Api.Controllers
             return Ok("ReportController работает!");
         }
 
-        [HttpGet("Expenditures")]
-        public async Task<ActionResult<CollectionResult<ExpenseReportDto>>> GetDocumentById(string user, [FromBody] ReportArgument argument)
+        [HttpPost("Expenditures")]
+        public async Task<ActionResult<CollectionResult<ExpenseReportDto>>> GetOrder([FromBody] ReportArgument argument)
         {
             var response = await _documentService.GetReportAsync(argument);
 

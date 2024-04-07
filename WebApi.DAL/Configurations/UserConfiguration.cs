@@ -14,6 +14,8 @@ namespace WebApi.DAL.Configurations
         public void Configure(EntityTypeBuilder<User> builder)
         {
             builder.Property(x => x.Id).ValueGeneratedOnAdd();
+            builder.Property(x => x.Login).IsRequired().HasMaxLength(255);
+            builder.Property(x => x.Password).IsRequired().HasMaxLength(255);
             builder.Property(x => x.Name).IsRequired().HasMaxLength(255);
 
             builder.HasMany<Expenditure>(x => x.Expenditures)

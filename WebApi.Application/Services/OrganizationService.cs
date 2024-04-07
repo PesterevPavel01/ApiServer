@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using WebApi.Application.Resources;
-using WebApi.Application.Validations;
 using WebApi.Domain.Dto.Document;
 using WebApi.Domain.Entity;
 using WebApi.Domain.Enum;
@@ -43,6 +42,7 @@ namespace WebApi.Application.Services
                         ErrorMessage = result.ErrorMessage,
                         ErrorCode = result.ErrorCode,
                     };
+
                 organization = new Organization
                 {
                     Name = model.Name

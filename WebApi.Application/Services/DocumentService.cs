@@ -13,6 +13,7 @@ using WebApi.Domain.Interfaces.Repositories;
 using WebApi.Domain.Interfaces.Services;
 using WebApi.Domain.Interfaces.Validations;
 using WebApi.Domain.Result;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace WebApi.Application.Services
 {
@@ -23,6 +24,7 @@ namespace WebApi.Application.Services
         private readonly IBaseRepository<Organization> _organizationRepository;
         private readonly IBaseRepository<Expenditure> _expenditureRepository;
         private readonly IBaseRepository<User> _userRepository;
+        private readonly IBaseRepository<Target> _targetRepository;
         private readonly IDocumentValidator _documentValidator;
         private readonly IExpenditureValidator _expenditureValidator;
         private readonly ILogger _logger;
@@ -33,6 +35,7 @@ namespace WebApi.Application.Services
             IBaseRepository<Organization> organizationRepository,
             IBaseRepository<Expenditure> expenditureRepository,
             IBaseRepository<User> userRepository,
+            IBaseRepository<Target> targetRepository,
             IDocumentValidator departmentValidator,
             IExpenditureValidator expenditureValidator,
             IMapper mapper, ILogger logger
@@ -43,6 +46,7 @@ namespace WebApi.Application.Services
             _departmentRepository = departmentRepository;
             _organizationRepository = organizationRepository;
             _expenditureRepository = expenditureRepository;
+            _targetRepository = targetRepository;
             _mapper = mapper;
             _logger = logger;
             _expenditureValidator = expenditureValidator;
@@ -370,12 +374,12 @@ namespace WebApi.Application.Services
 
         public async Task<CollectionResult<ExpenseReportDto>> GetReportAsync(ReportArgument argument)
         {
-            
+
             try
             {
-                var documents= await _documentRepository.GetAll().Where(x => x.Date >= argument.dateStart && x.Date <= argument.dateEnd).ToListAsync();
+                var documents= await _documentRepository.GetAll().Where(x => x.Date.Year == argument.Year && x.Date.Month == argument.Month).ToListAsync();
 
-                var user = await _userRepository.GetAll().FirstOrDefaultAsync(x=>x.Name== argument.user);
+                var user = await _userRepository.GetAll().FirstOrDefaultAsync(x=>x.Login== argument.Login && x.Password==argument.Password);
 
                 if (user==null)
                     return new CollectionResult<ExpenseReportDto>
@@ -384,10 +388,17 @@ namespace WebApi.Application.Services
                         ErrorCode = (int)ErrorCodes.UserNotFound,
                     };
 
-                var report = from d in documents
-                             join e in _expenditureRepository.GetAll().Where(x => x.UserID == user.Id).ToList()
+                var subReport = from d in documents
+                             join e in _expenditureRepository.GetAll().Where(x => x.UserID == user.Id)
                              on d.ExpenditureID equals e.Id
-                             select new { Value = d.Value, Expenditure = e.Name };
+                             select new { Value = d.Value, Expenditure = e.Id, ExpenditureName=e.Name};
+
+
+                var report = from sr in subReport
+                             join t in _targetRepository.GetAll().Where(x => x.Month == argument.Month && x.Year == argument.Year)
+                             on sr.Expenditure equals t.ExpenditureID into tblExpend
+                             from resTbl in tblExpend.DefaultIfEmpty()
+                             select new { Value = sr.Value, Expenditure = sr.ExpenditureName, Target = resTbl?.Value??0 };
 
                 if (!report.Any())
                 {
@@ -401,7 +412,7 @@ namespace WebApi.Application.Services
                 List<ExpenseReportDto> expenseReport = report
                     .GroupBy(x=>x.Expenditure)
                     .Select(er=>
-                    new ExpenseReportDto(er.First().Expenditure,er.Sum(d=>d.Value))
+                    new ExpenseReportDto(er.First().Expenditure,er.Sum(d=>d.Value),user.Name,er.First().Target)
                     ).ToList();
 
                 return new CollectionResult<ExpenseReportDto>

@@ -12,7 +12,8 @@ namespace WebApi.Domain.Entity
         public User() { }
         public short Id { get; set ; }
         public string Name { get; set ; }
-
+        public string Login { get; set; }
+        public string Password { get; set; }
         public List<Expenditure> Expenditures { get; set; }
         public DateTime CreatedAt { get ; set ; }
         public DateTime UpdatedAt { get; set; }

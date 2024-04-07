@@ -6,5 +6,5 @@ using System.Threading.Tasks;
 
 namespace WebApi.Domain.Dto.Order
 {
-    public record ExpenseReportDto(string Expenditure,double Value);
+    public record ExpenseReportDto(string Expenditure,double Value, string Responsible,double? Target);
 }

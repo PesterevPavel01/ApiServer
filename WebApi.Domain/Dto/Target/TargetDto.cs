@@ -6,5 +6,5 @@ using System.Threading.Tasks;
 
 namespace WebApi.Domain.Dto.Target
 {
-    public record TargetDto(short? Id, string Expenditure,double Value,DateTime Date);
+    public record TargetDto(long? Id, string Expenditure,double Value,short Month,short Year);
 }
